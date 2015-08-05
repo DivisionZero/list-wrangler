@@ -1,4 +1,4 @@
-var ListCategory   = require('./category.js');
+var ListCategory   = require('./listcategory.js');
 var ListElement    = require('./listelement.js');
 var utils          = require('./utils.js');
 var listelem_error = '{field} must be an instance of ListElement';
@@ -28,74 +28,82 @@ function List(list_descriptor, category, ordered, sidebar) {
 List.prototype = Object.create(ListElement.prototype);
 
 List.prototype.editCategory = function(category) {
-	if (!(category) instanceof ListCategory) {
+	if (!(category instanceof ListCategory)) {
 		throw new Error(utils.createError(category, 'category'));
 	}
 	this.category = category;
-}
+    return this;
+};
 
 List.prototype.editOrdered = function(ordered) {
 	this.ordered = ordered ? true : false; 
-}
+    return this;
+};
 
 List.prototype.editSidebar = function(sidebar) {
 	this.sidebar = sidebar ? true : false; 
-}
+    return this;
+};
 
 List.prototype.addListElement = function(list_element) {
 	if (!(list_element instanceof ListElement)) {
 		throw new Error(utils.createError(list_element, 'list_element'));
 	}
 	this.elements.push(list_element);
-}
+    return this;
+};
 
 List.prototype.removeListElement = function(index) {
 	this.elements.splice(index, 1);
-}
+    return this;
+};
 
 List.prototype.moveListElement = function(current_index, new_index) {
 	this.elements.splice(new_index, 0, this.elements.splice(current_index, 1)[0]);
-}
+    return this;
+};
 
 List.prototype.getChecked = function() {
 	return this.elements.filter(function(element) {
 		return element.is_checked ? element : false;
 	});
-}
+};
 
 List.prototype.getDue = function() {
 	return this.elements.filter(function(element) {
 		return element.isDue() ? element : false;
 	});
-}
+};
 
 List.prototype.getAlerts = function() {
 	return this.elements.filter(function(element) {
 		return element.isAlert() ? element : false;
 	});
-}
+};
 
 List.prototype.getRemaining = function() {
 	return this.elements.filter(function(element) {
 		return !element.is_checked ? element : false;
 	});
-}
+};
 
 List.prototype.getAllElements = function() {
 	return this.elements;
-}
+};
 
 List.prototype.checkAll = function() {
 	this.elements.forEach(function(element) {
 		element.editIsChecked(true);
 	});
-}
+    return this;
+};
 
 List.prototype.uncheckAll = function() {
 	this.elements.forEach(function(element) {
 		element.editIsChecked(false);
 	});
-}
+    return this;
+};
 
 
 module.exports = List;
